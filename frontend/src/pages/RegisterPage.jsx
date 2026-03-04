@@ -31,9 +31,9 @@ export default function RegisterPage() {
     setLoading(true)
     try {
       await registerApi({
-        full_name: fullName,
-        email,
-        phone_number: phoneNumber,
+        full_name: fullName.trim(),
+        email: email.trim(),
+        phone_number: phoneNumber.trim(),
         password,
       })
       navigate('/login')

@@ -30,7 +30,7 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      const user = await login({ email, password })
+      const user = await login({ email: email.trim(), password })
       const next = params.get('next')
       if (next) {
         navigate(next)
