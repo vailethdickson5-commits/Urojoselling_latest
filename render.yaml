@@ -5,7 +5,7 @@ services:
     plan: free
     region: oregon
     rootDir: backend
-    buildCommand: pip install -r requirements.txt && python manage.py migrate && python create_superuser.py && python manage.py collectstatic --noinput
+    buildCommand: pip install -r requirements.txt && python manage.py migrate && python create_superuser.py && python seed_data.py && python manage.py collectstatic --noinput
     startCommand: gunicorn config.wsgi:application
     envVars:
       - key: DJANGO_SECRET_KEY
