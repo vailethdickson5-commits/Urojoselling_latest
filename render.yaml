@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: urojoselling-backend
+    runtime: python
+    plan: free
+    region: oregon
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: gunicorn config.wsgi:application
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: urojoselling-backend.onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://your-frontend.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://your-frontend.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: urojoselling-db
+          property: connectionString
+
+databases:
+  - name: urojoselling-db
+    plan: free
