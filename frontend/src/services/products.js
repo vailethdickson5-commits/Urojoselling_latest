@@ -1,5 +1,11 @@
 import api from './api'
 
+function normalizeListResponse(data) {
+  if (Array.isArray(data)) return data
+  if (Array.isArray(data?.results)) return data.results
+  return []
+}
+
 function toProductFormData(payload) {
   const fd = new FormData()
   Object.entries(payload).forEach(([key, value]) => {
@@ -13,7 +19,7 @@ function toProductFormData(payload) {
 
 export async function listProducts() {
   const res = await api.get('/api/products/')
-  return res.data
+  return normalizeListResponse(res.data)
 }
 
 export async function getProduct(id) {
@@ -23,7 +29,7 @@ export async function getProduct(id) {
 
 export async function listCategories() {
   const res = await api.get('/api/categories/')
-  return res.data
+  return normalizeListResponse(res.data)
 }
 
 export async function createCategory(payload) {
