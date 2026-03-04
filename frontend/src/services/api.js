@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseURL = (import.meta.env.VITE_API_BASE_URL || '/').replace(/\/$/, '')
+const defaultApiBaseUrl = 'https://urojoselling-latest-2.onrender.com'
+const baseURL = (import.meta.env.VITE_API_BASE_URL || defaultApiBaseUrl).replace(/\/$/, '')
 
 const api = axios.create({
   baseURL,

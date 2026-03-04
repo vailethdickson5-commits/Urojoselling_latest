@@ -30,7 +30,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        email = attrs.get('email')
+        email = (attrs.get('email') or '').strip().lower()
         password = attrs.get('password')
         user = authenticate(request=self.context.get('request'), username=email, password=password)
         if not user:

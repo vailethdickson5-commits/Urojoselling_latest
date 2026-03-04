@@ -13,7 +13,7 @@ body,
 
 body {
   margin: 0;
-  background: #ffffff;
+  background: radial-gradient(circle at 10% 10%, #e0f7ff 0%, #f7fdff 45%, #ffffff 100%);
 }
 
 input:-webkit-autofill,

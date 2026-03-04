@@ -5,11 +5,14 @@ const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#6B7280',
+      main: '#0E7490',
+    },
+    secondary: {
+      main: '#F97316',
     },
     background: {
-      default: '#FFFFFF',
-      paper: '#F6F7F9',
+      default: '#F2FBFF',
+      paper: '#FFFFFF',
     },
   },
   shape: {
@@ -55,7 +58,8 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 16,
-          boxShadow: '0px 1px 10px rgba(0,0,0,0.06)',
+          border: '1px solid #D8EEF5',
+          boxShadow: '0px 8px 24px rgba(7, 89, 133, 0.08)',
         },
       },
     },
