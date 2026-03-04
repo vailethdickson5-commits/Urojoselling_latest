@@ -1,4 +1,3 @@
-from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -14,7 +13,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at']
 
     def validate_email(self, value):
-        normalized = User.objects.normalize_email((value or '').strip())
+        normalized = User.objects.normalize_email((value or '').strip()).lower()
         if User.objects.filter(email__iexact=normalized).exists():
             raise serializers.ValidationError('A user with this email already exists.')
         return normalized
@@ -33,12 +32,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        email = User.objects.normalize_email((attrs.get('email') or '').strip())
+        email = User.objects.normalize_email((attrs.get('email') or '').strip()).lower()
         password = attrs.get('password')
-        attrs['email'] = email
-        user = authenticate(request=self.context.get('request'), username=email, password=password)
-        if not user:
+        user = User.objects.filter(email__iexact=email).first()
+        if not user or not user.check_password(password) or not user.is_active:
             raise serializers.ValidationError('Invalid email or password')
+        attrs['email'] = user.email
         data = super().validate(attrs)
         data['user'] = {
             'id': user.id,
