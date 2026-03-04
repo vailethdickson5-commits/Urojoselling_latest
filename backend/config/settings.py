@@ -10,13 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+<<<<<<< HEAD
 from pathlib import Path
 from datetime import timedelta
+=======
+import os
+from datetime import timedelta
+from pathlib import Path
+
+import dj_database_url
+>>>>>>> a35df03b0edb4f0a097edb68a952653ee60c665c
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+<<<<<<< HEAD
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
@@ -27,6 +36,24 @@ SECRET_KEY = 'django-insecure-yd+owkb28(16cs!kqg$)s2s@2#q0*#tamw-@=yb9c)ju)tupsm
 DEBUG = True
 
 ALLOWED_HOSTS = []
+=======
+def _csv_env(name: str) -> list[str]:
+    value = os.getenv(name, '')
+    return [item.strip() for item in value.split(',') if item.strip()]
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-yd+owkb28(16cs!kqg$)s2s@2#q0*#tamw-@=yb9c)ju)tupsm')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
+
+ALLOWED_HOSTS = _csv_env('DJANGO_ALLOWED_HOSTS')
+if render_host := os.getenv('RENDER_EXTERNAL_HOSTNAME'):
+    ALLOWED_HOSTS.append(render_host)
+if DEBUG and not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+>>>>>>> a35df03b0edb4f0a097edb68a952653ee60c665c
 
 
 # Application definition
@@ -48,6 +75,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+<<<<<<< HEAD
+=======
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+>>>>>>> a35df03b0edb4f0a097edb68a952653ee60c665c
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,13 +118,23 @@ DATABASES = {
     }
 }
 
+<<<<<<< HEAD
+=======
+if database_url := os.getenv('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)
+
+>>>>>>> a35df03b0edb4f0a097edb68a952653ee60c665c
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
+<<<<<<< HEAD
 AUTH_PASSWORD_VALIDATORS = [
 
 ]
+=======
+AUTH_PASSWORD_VALIDATORS = []
+>>>>>>> a35df03b0edb4f0a097edb68a952653ee60c665c
 
 
 # Internationalization
@@ -111,16 +152,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+<<<<<<< HEAD
 STATIC_URL = 'static/'
 
 MEDIA_URL = 'media/'
+=======
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+>>>>>>> a35df03b0edb4f0a097edb68a952653ee60c665c
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
+<<<<<<< HEAD
 CORS_ALLOW_ALL_ORIGINS = True
+=======
+CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'True' if DEBUG else 'False').lower() == 'true'
+CORS_ALLOWED_ORIGINS = _csv_env('CORS_ALLOWED_ORIGINS')
+CSRF_TRUSTED_ORIGINS = _csv_env('CSRF_TRUSTED_ORIGINS')
+>>>>>>> a35df03b0edb4f0a097edb68a952653ee60c665c
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -140,3 +195,11 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
+<<<<<<< HEAD
+=======
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+>>>>>>> a35df03b0edb4f0a097edb68a952653ee60c665c

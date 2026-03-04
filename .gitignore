@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+db.sqlite3
+venv/
+
+# Node
+node_modules/
+dist/
+
+# VS Code
+.vscode/
+
+# Media
+media/
