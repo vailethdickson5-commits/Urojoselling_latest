@@ -13,11 +13,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-dev-key-change-me")
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = [
+_env_allowed_hosts = [
     host.strip()
     for host in os.environ.get("ALLOWED_HOSTS", "").split(",")
     if host.strip()
 ]
+_default_allowed_hosts = ["localhost", "127.0.0.1"]
+_render_external_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if _render_external_hostname:
+    _default_allowed_hosts.append(_render_external_hostname)
+ALLOWED_HOSTS = _env_allowed_hosts or _default_allowed_hosts
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -106,6 +111,10 @@ CSRF_TRUSTED_ORIGINS = [
     for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
     if origin.strip()
 ]
+if _render_external_hostname:
+    _render_origin = f"https://{_render_external_hostname}"
+    if _render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_render_origin)
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_SECURE = not DEBUG
