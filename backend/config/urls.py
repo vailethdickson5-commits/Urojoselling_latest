@@ -17,9 +17,17 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import include, path
 
+
+def root_view(request):
+    return JsonResponse({"status": "ok", "service": "urojoselling-backend"})
+
+
 urlpatterns = [
+    path('', root_view, name='root'),
+    path('health/', root_view, name='health'),
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('api/', include('products.urls')),
